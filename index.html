@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#6EC8FF">
+  <meta name="description" content="Alfabetkowo — nauka polskiego alfabetu dla dzieci. Słuchaj, odkrywaj, mów i zgaduj literki.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Alfabetkowo">
+  <title>Alfabetkowo</title>
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <span class="spark s1">✦</span>
+    <span class="spark s2">✦</span>
+    <span class="spark s3">✦</span>
+  </div>
+
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="owl" id="owl" aria-hidden="true">
+          <svg class="owl-svg" viewBox="0 0 80 80">
+            <ellipse cx="40" cy="48" rx="26" ry="22" fill="#c4844a"/>
+            <path d="M16 30 L28 38" stroke="#c4844a" stroke-width="5" stroke-linecap="round"/>
+            <path d="M64 30 L52 38" stroke="#c4844a" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="40" cy="52" rx="15" ry="13" fill="#f6e2c4"/>
+            <g class="eye">
+              <ellipse cx="29" cy="42" rx="9" ry="10" fill="#fff"/>
+              <circle cx="31" cy="44" r="3.4" fill="#243047"/>
+            </g>
+            <g class="eye">
+              <ellipse cx="51" cy="42" rx="9" ry="10" fill="#fff"/>
+              <circle cx="53" cy="44" r="3.4" fill="#243047"/>
+            </g>
+            <path d="M36 50 L40 56 L44 50 Z" fill="#e07a3d"/>
+            <ellipse cx="22" cy="50" rx="3" ry="2" fill="#f3b6b6" opacity="0.8"/>
+            <ellipse cx="58" cy="50" rx="3" ry="2" fill="#f3b6b6" opacity="0.8"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Alfabetkowo</h1>
+          <p class="tag">Polskie literki z Sówką</p>
+        </div>
+      </div>
+      <div class="tools">
+        <div class="star-pill" id="starPill">
+          <span id="starCount">⭐ 0</span>
+          <small id="todayCount">dziś 0</small>
+        </div>
+        <button class="icon-btn" id="btnCase" type="button" aria-pressed="true" aria-label="Małe literki">Aa</button>
+        <button class="icon-btn" id="btnSound" type="button" aria-pressed="true" aria-label="Dźwięk">🔊</button>
+        <button class="icon-btn" id="btnInfo" type="button" aria-label="Dla rodzica">ℹ️</button>
+      </div>
+    </header>
+
+    <nav class="modes" aria-label="Tryby zabawy">
+      <button type="button" data-mode="listen" aria-pressed="true"><span class="mode-ico">👂</span><span>Słuchaj</span></button>
+      <button type="button" data-mode="reveal" aria-pressed="false"><span class="mode-ico">✨</span><span>Odkryj</span></button>
+      <button type="button" data-mode="speak" aria-pressed="false"><span class="mode-ico">🎤</span><span>Powiedz</span></button>
+      <button type="button" data-mode="find" aria-pressed="false"><span class="mode-ico">🎯</span><span>Zgadnij</span></button>
+    </nav>
+
+    <div class="coach-row">
+      <p id="coach" aria-live="polite"></p>
+      <button class="btn tiny" id="btnReplay" type="button">Powtórz</button>
+    </div>
+
+    <div class="meter" aria-hidden="true">
+      <div class="meter-bar"><span id="meterFill"></span></div>
+      <span id="meterText">0 z 32</span>
+    </div>
+
+    <main class="stage">
+      <div class="grid mode-all" id="grid"></div>
+      <div class="done-panel" id="donePanel" hidden>
+        <div>
+          <p>Wszystkie literki znalezione!</p>
+          <button class="btn primary" id="btnAgain" type="button">Jeszcze raz</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="welcome" hidden>
+    <div class="modal-card" role="dialog" aria-labelledby="welcomeTitle">
+      <div class="owl" aria-hidden="true" style="margin:0 auto">
+        <svg class="owl-svg" viewBox="0 0 80 80">
+          <ellipse cx="40" cy="48" rx="26" ry="22" fill="#c4844a"/>
+          <ellipse cx="40" cy="52" rx="15" ry="13" fill="#f6e2c4"/>
+          <ellipse cx="29" cy="42" rx="9" ry="10" fill="#fff"/>
+          <ellipse cx="51" cy="42" rx="9" ry="10" fill="#fff"/>
+          <circle cx="31" cy="44" r="3.4" fill="#243047"/>
+          <circle cx="53" cy="44" r="3.4" fill="#243047"/>
+          <path d="M36 50 L40 56 L44 50 Z" fill="#e07a3d"/>
+        </svg>
+      </div>
+      <h2 id="welcomeTitle">Cześć! Jestem Sówka.</h2>
+      <p>Razem poznamy całe polskie abecadło. Najpierw posłuchaj literek.</p>
+      <div class="actions">
+        <button class="btn primary wide" id="btnStart" type="button">Zaczynamy!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="speakModal" hidden>
+    <div class="modal-card talk" role="dialog" aria-labelledby="micStatus">
+      <div class="big-letter" id="bigLetter">A</div>
+      <div class="big-lower" id="bigLower">a</div>
+      <div class="big-word" id="bigWord">🍉 arbuz</div>
+      <button class="mic" id="micBtn" type="button" aria-pressed="false" aria-label="Mówię">🎤</button>
+      <p class="mic-status" id="micStatus" aria-live="assertive">Słuchaj…</p>
+      <p class="heard" id="heardLine"></p>
+      <div class="actions">
+        <button class="btn" id="btnHear" type="button">Posłuchaj</button>
+        <button class="btn" id="btnSpeakClose" type="button">Zamknij</button>
+        <button class="btn primary" id="btnManual" type="button" hidden>Już powiedziane ★</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="completeModal" hidden>
+    <div class="modal-card" role="dialog" aria-labelledby="winTitle">
+      <p style="font-size:3rem;margin:0" aria-hidden="true">🎉</p>
+      <h2 id="winTitle">Brawo!</h2>
+      <p id="winText">Znasz całe abecadło!</p>
+      <div class="actions">
+        <button class="btn primary" id="btnWinAgain" type="button">Jeszcze raz</button>
+        <button class="btn" id="btnWinStay" type="button">Zostaw</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="infoModal" hidden>
+    <div class="modal-card help" role="dialog" aria-labelledby="infoTitle">
+      <h2 id="infoTitle">Dla rodzica</h2>
+      <p>Bez konta i bez reklam. Gwiazdki zostają na tym tablecie.</p>
+      <h3>Cztery zabawy</h3>
+      <ul>
+        <li><b>Słuchaj</b> — literki na całym ekranie. Dotknięcie mówi nazwę i słowo.</li>
+        <li><b>Odkryj</b> — puste miejsca. Dotknięcie odkrywa literkę.</li>
+        <li><b>Powiedz</b> — puste miejsce, Sówka mówi, dziecko powtarza. Dobrze powiedziane literki wchodzą na planszę.</li>
+        <li><b>Zgadnij</b> — Sówka pyta, dziecko wybiera jedną z czterech dużych literek.</li>
+      </ul>
+      <h3>Na tablecie</h3>
+      <p class="url" id="pageUrl">chopke20.github.io/alfabety</p>
+      <ul>
+        <li>Android, Chrome: menu → Dodaj do ekranu głównego.</li>
+        <li>iPad, Safari: Udostępnij → Do ekranu początkowego.</li>
+      </ul>
+      <h3>Mikrofon</h3>
+      <p>Tryb Powiedz działa najlepiej w Chrome. Przy pierwszym razie przeglądarka poprosi o mikrofon. Potrzebny jest internet, bo rozpoznawanie mowy idzie przez przeglądarkę. Aplikacja nie zapisuje nagrań.</p>
+      <p>Na iPadzie mikrofon w przeglądarce czasem nie działa. Wtedy dziecko mówi literkę, a przycisk z gwiazdką ją odsłania.</p>
+      <p>Przycisk Aa pokazuje albo chowa małe literki. Podobne głoski (a i ą, l i ł) dostają podpowiedź „prawie”.</p>
+      <div class="actions">
+        <button class="btn" id="btnResetAsk" type="button">Od nowa w tym trybie</button>
+        <button class="btn primary" id="btnInfoClose" type="button">Wracam do zabawy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="resetModal" hidden>
+    <div class="modal-card" role="dialog" aria-labelledby="resetTitle">
+      <h2 id="resetTitle">Zaczynamy ten tryb od nowa?</h2>
+      <p>Literki w tej zabawie się schowają. Gwiazdki zostają.</p>
+      <div class="actions">
+        <button class="btn primary" id="btnResetYes" type="button">Tak</button>
+        <button class="btn" id="btnResetNo" type="button">Nie</button>
+      </div>
+    </div>
+  </div>
+
+  <noscript><p class="noscript">Alfabetkowo potrzebuje włączonego JavaScriptu.</p></noscript>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
